@@ -1,0 +1,39 @@
+endpoints:
+  enabled: true
+  refresh:
+    enabled: true
+security:
+  basic:
+    enabled: false
+management:
+  security:
+    enabled: false
+  context-path: /hifi/context/
+server:
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /apps/springboot-starter/access-logs
+      pattern: common
+      rename-on-rotate: true
+      suffix: .log
+    basedir: /apps/springboot-starter/tomcat-logs
+logging:
+  file: app-logs/springboot-starter.log
+spring:
+  kafka:
+    bootstrap-servers: 10.65.133.232:9093
+    ssl:
+      keystore-password: dam_Certificate1234
+      keystore-location: /Users/z083387/Desktop/Kafka/kafka-dev/dam-publish-dev.target.com.jks
+      truststore-location: /Users/z083387/Desktop/Kafka/kafka-dev/kafka.dev.client.truststore.jks
+      truststore-password: changeit
+    consumer:
+      bootstrap-servers:
+    producer:
+      bootstrap-servers:
+jwt:
+  header: Authorization
+token:
+  prefix: Bearer
+
