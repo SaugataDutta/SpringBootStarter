@@ -22,7 +22,7 @@ logging:
   file: app-logs/springboot-starter.log
 spring:
   kafka:
-    bootstrap-servers: 10.65.133.232:9093
+    bootstrap-servers: localhost:9092
     ssl:
       keystore-password: dam_Certificate1234
       keystore-location: /Users/z083387/Desktop/Kafka/kafka-dev/dam-publish-dev.target.com.jks
