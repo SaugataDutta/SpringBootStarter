@@ -2,6 +2,8 @@ package com.tgt.mkt.cam.config;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -14,24 +16,25 @@ import static com.tgt.mkt.cam.config.KafkaConstants.*;
  */
 
 @Slf4j
-@Component
+@Configuration
+@Getter
 public class KafkaConfiguration {
 
-    @Getter
+    @Value("${spring.kafka.security-protocol}")
     private String securityProtocol;
-    @Getter
+    @Value("${spring.kafka.ssl.keystore-location}")
     private String sslKeystoreLocation;
-    @Getter
+    @Value("${spring.kafka.ssl.keystore-password}")
     private String sslKeystorePassword;
-    @Getter
+    @Value("${spring.kafka.ssl.truststore-location}")
     private String sslTruststoreLocation;
-    @Getter
+    @Value("${spring.kafka.ssl.truststore-password}")
     private String sslTruststorePassword;
 
-    @Getter
+    @Value("${spring.kafka.bootstrap-servers}")
     private String brokerHosts;
 
-    @PostConstruct
+    /*@PostConstruct
     public void buildCredentials(){
         try{
             securityProtocol = getConfigInstance().getString(SECURITY_PROTOCOL);
@@ -48,5 +51,5 @@ public class KafkaConfiguration {
         }catch(Exception e){
 
         }
-    }
+    }*/
 }
