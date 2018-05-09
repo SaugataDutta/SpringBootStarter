@@ -1,4 +1,9 @@
 buildscript {
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+        prometheusVersion = '0.0.21'
+        springMetricsVersion = '3.1.3'
+    }
     repositories {
         mavenCentral()
     }
@@ -25,9 +30,20 @@ repositories {
 
 dependencies {
 
-    compile "org.springframework.boot:spring-boot-starter-web"
-    compile "org.springframework.boot:spring-boot-starter-actuator"
-    compile('org.springframework.boot:spring-boot-starter-security')
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-security"
+    //compile("org.springframework.ldap:spring-ldap-core")
+    //compile("org.springframework.security:spring-security-ldap")
+    //compile("org.springframework:spring-tx")
+    //compile("org.springframework.boot:spring-boot-starter-websocket")
+
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+
+    compile 'org.postgresql:postgresql:42.1.1'
+
+
+
     compile 'com.auth0:java-jwt:3.1.0'
     compile group: "org.apache.kafka", name: "kafka-clients", version: "0.10.2.1"
     compile group: 'org.projectlombok', name: 'lombok', version: '1.14.4'
