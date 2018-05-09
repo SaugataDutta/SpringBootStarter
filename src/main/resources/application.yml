@@ -8,32 +8,34 @@ security:
 management:
   security:
     enabled: false
-  context-path: /hifi/context/
-server:
-  tomcat:
-    accesslog:
-      enabled: true
-      directory: /apps/springboot-starter/access-logs
-      pattern: common
-      rename-on-rotate: true
-      suffix: .log
-    basedir: /apps/springboot-starter/tomcat-logs
-logging:
-  file: app-logs/springboot-starter.log
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 10.65.133.232:9093
+    security-protocol: SSL
     ssl:
-      keystore-password: dam_Certificate1234
-      keystore-location: /Users/z083387/Desktop/Kafka/kafka-dev/dam-publish-dev.target.com.jks
-      truststore-location: /Users/z083387/Desktop/Kafka/kafka-dev/kafka.dev.client.truststore.jks
-      truststore-password: changeit
+      #keystore-password: dam_Certificate1234
+      #keystore-location: /Users/z083387/Desktop/Kafka/kafka-dev/dam-publish-dev.target.com.jks
+      #truststore-location: /Users/z083387/Desktop/Kafka/kafka-dev/kafka.dev.client.truststore.jks
+      #truststore-password: changeit
+      keystore-location: /Users/z083387/Desktop/Kafka/Self-signed/dam-publish-dev.target.com.jks
+      truststore-location: /Users/z083387/Desktop/Kafka/Self-signed/dev.server.keystore.jks
+      truststore-password: kafkasecret
+      keystore-password: kafkasecret
     consumer:
-      bootstrap-servers:
+      bootstrap-servers: 10.65.133.232:9093
     producer:
-      bootstrap-servers:
+      bootstrap-servers: 10.65.133.232:9093
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+  jpa:
+    properties:
+      hibernate:
+        dialect: com.tgt.mkt.cam.entity.CustomPostgreSqlDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 jwt:
   header: Authorization
 token:
   prefix: Bearer
-
