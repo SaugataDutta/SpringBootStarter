@@ -1,4 +1,4 @@
-package com.tgt.mkt.cam.security.exception;
+package com.tgt.mkt.cam.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
