@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class KafkaService {
 
-    /*
+
     @Getter
     KafkaProducerUtil kafkaProducerUtil;
 
@@ -27,18 +27,16 @@ public class KafkaService {
         this.kafkaProducerUtil = kafkaProducerUtil;
         this.kafkaConsumerUtil = kafkaConsumerUtil;
     }
-    */
     public RecordMetadata writeMessageToTopic(String topicName, KafkaRequestObject requestObject){
-        //RecordMetadata responseData = kafkaProducerUtil.sendMessage(topicName,requestObject);
-        RecordMetadata responseData = null;
+        RecordMetadata responseData = kafkaProducerUtil.sendMessage(topicName,requestObject);
         return responseData;
     }
 
     public KafkaRequestObject readMessageFromTopic(String topicName, int partition, long  offset){
-        //KafkaRequestObject responseData = kafkaConsumerUtil.getMessage(topicName,partition,offset);
-        KafkaRequestObject responseData = KafkaRequestObject.builder().assetId("Asset-ID")
+        KafkaRequestObject responseData = kafkaConsumerUtil.getMessage(topicName,partition,offset);
+        /*KafkaRequestObject responseData = KafkaRequestObject.builder().assetId("Asset-ID")
                 .assetName("Asset-Name")
-                .comment("Comments").build();
+                .comment("Comments").build();*/
         return responseData;
     }
 }
