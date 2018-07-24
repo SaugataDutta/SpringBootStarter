@@ -8,21 +8,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 /**
- * Created by z083387 on 3/5/18.
+ * Created by Saugata.Dutta on 05/06/18.
  */
 @AllArgsConstructor
 public class AuthenticatedUser implements UserDetails {
 
-    private String username;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    
+    @Getter
+    private String documentNumber;
+    
     @Getter
     private String email;
+    
     @Getter
-    private String firstName;
-    @Getter
-    private String lastName;
+    private String issuer;
 
     private Collection<? extends GrantedAuthority> authorities;
-
 
 
     @Override
@@ -37,7 +42,7 @@ public class AuthenticatedUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return null;
     }
 
     @Override

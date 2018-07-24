@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import java.util.Arrays;
 
 /**
- * Created by z083387 on 3/5/18.
+ * Created by Saugata.Dutta on 05/06/18.
  */
 
 @Configuration
@@ -29,8 +29,7 @@ import java.util.Arrays;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
+    public static final String PATH = "/profile/**";
 
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
@@ -44,32 +43,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
-        RequestMatcher postReqMatch = new AntPathRequestMatcher("/**", HttpMethod.POST.name());
-        RequestMatcher putReqMatch = new AntPathRequestMatcher("/**", HttpMethod.PUT.name());
-        RequestMatcher deleteReqMatch = new AntPathRequestMatcher("/**", HttpMethod.DELETE.name());
-        RequestMatcher getReqMatch = new AntPathRequestMatcher("/**", HttpMethod.GET
-                .name());
+        RequestMatcher postReqMatch = new AntPathRequestMatcher(PATH,
+                HttpMethod.PUT.name());
+        RequestMatcher putReqMatch = new AntPathRequestMatcher(PATH,
+                HttpMethod.POST.name());
+        RequestMatcher deleteReqMatch = new AntPathRequestMatcher(PATH,
+                HttpMethod.DELETE.name());
+        RequestMatcher getReqMatch = new AntPathRequestMatcher(PATH,
+                HttpMethod.GET.name());
 
-        RequestMatcher reqMatch = new OrRequestMatcher(postReqMatch, putReqMatch,
-                deleteReqMatch, getReqMatch);
+        RequestMatcher reqMatch = new OrRequestMatcher(postReqMatch, putReqMatch, deleteReqMatch,
+                getReqMatch);
 
         JwtAuthenticationFilter authenticationTokenFilter = new JwtAuthenticationFilter(reqMatch);
         authenticationTokenFilter.setAuthenticationManager(authenticationManager());
-        authenticationTokenFilter.setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler());
+        authenticationTokenFilter
+                .setAuthenticationSuccessHandler(new JwtAuthenticationSuccessHandler());
+        authenticationTokenFilter
+                .setAuthenticationFailureHandler(new JwtAuthenticationFailureHandler());
         return authenticationTokenFilter;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.anonymous().and()
-                .csrf().disable()
-                .authorizeRequests().anyRequest().permitAll()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-                .and()
+        http.anonymous().and().csrf().disable().authorizeRequests().anyRequest().permitAll().and()
+                .exceptionHandling().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().anyRequest().permitAll();
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authenticationTokenFilterBean(),
+                UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
     }
 }
