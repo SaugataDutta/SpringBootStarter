@@ -37,5 +37,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 jwt:
   header: Authorization
+  jti: 69171853-0314-40fa-9dbd-91e89ef3c952
+  secret: secret
+  expiry: 2
 token:
   prefix: Bearer
