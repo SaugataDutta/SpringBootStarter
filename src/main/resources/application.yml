@@ -1,30 +1,21 @@
-endpoints:
-  enabled: true
-  refresh:
-    enabled: true
-security:
-  basic:
-    enabled: false
-management:
-  security:
-    enabled: false
 spring:
+  cache:
+    type: redis
+  redis:
+    host: localhost
+    port: 6379
   kafka:
-    bootstrap-servers: 10.65.133.232:9093
+    bootstrap-servers: loclhost:9092
     security-protocol: SSL
     ssl:
-      #keystore-password: dam_Certificate1234
-      #keystore-location: /Users/z083387/Desktop/Kafka/kafka-dev/dam-publish-dev.target.com.jks
-      #truststore-location: /Users/z083387/Desktop/Kafka/kafka-dev/kafka.dev.client.truststore.jks
-      #truststore-password: changeit
       keystore-location: /Users/z083387/Desktop/Kafka/Self-signed/dam-publish-dev.target.com.jks
       truststore-location: /Users/z083387/Desktop/Kafka/Self-signed/dev.server.keystore.jks
       truststore-password: kafkasecret
       keystore-password: kafkasecret
     consumer:
-      bootstrap-servers: 10.65.133.232:9093
+      bootstrap-servers: localhost:9092
     producer:
-      bootstrap-servers: 10.65.133.232:9093
+      bootstrap-servers: localhost:9092
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     driver-class-name: org.postgresql.Driver
@@ -33,8 +24,10 @@ spring:
   jpa:
     properties:
       hibernate:
-        dialect: com.tgt.mkt.cam.entity.CustomPostgreSqlDialect
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: com.tgt.mkt.cam.entity.types.CustomPostgreSqlDialect
 jwt:
   header: Authorization
   jti: 69171853-0314-40fa-9dbd-91e89ef3c952

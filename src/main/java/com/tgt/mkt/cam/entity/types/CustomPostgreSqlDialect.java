@@ -1,4 +1,4 @@
-package com.tgt.mkt.cam.entity;
+package com.tgt.mkt.cam.entity.types;
 
 import org.hibernate.dialect.PostgreSQL94Dialect;
 

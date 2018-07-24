@@ -1,14 +1,4 @@
-package com.tgt.mkt.cam.entity;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.SimpleType;
-import org.hibernate.HibernateException;
-import org.hibernate.engine.spi.SessionImplementor;
-import org.hibernate.usertype.DynamicParameterizedType;
-import org.hibernate.usertype.UserType;
-import org.postgresql.util.PGobject;
+package com.tgt.mkt.cam.entity.types;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,8 +8,21 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Properties;
 
+import org.hibernate.HibernateException;
+import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.usertype.DynamicParameterizedType;
+import org.hibernate.usertype.UserType;
+import org.postgresql.util.PGobject;
 
-public class JsonUserType implements UserType, DynamicParameterizedType {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.type.SimpleType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+public class JsonType implements UserType, DynamicParameterizedType {
 
     private static final int[] SQL_TYPES = { Types.JAVA_OBJECT };
     private Class<?> returnedClass;
@@ -46,21 +49,26 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor session) throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement st, Object value, int index,
+            SharedSessionContractImplementor session) throws HibernateException, SQLException {
         PGobject dataObject = new PGobject();
         dataObject.setType("json");
 
-        if (value != null)
+        if (value != null) {
             dataObject.setValue(convertObjectToJson(value));
+        }
 
         st.setObject(index, dataObject);
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor session, Object owner) throws HibernateException, SQLException {
+    public Object nullSafeGet(ResultSet rs, String[] names,
+            SharedSessionContractImplementor session, Object owner)
+            throws HibernateException, SQLException {
         Object result = rs.getObject(names[0]);
-        if (result instanceof PGobject)
+        if (result instanceof PGobject) {
             return convertJsonToObject(((PGobject) result).getValue());
+        }
 
         return null;
     }
@@ -68,9 +76,12 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
     Object convertJsonToObject(String content) {
         try {
             ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE, false);
+            mapper.registerModule(new JavaTimeModule());
             JavaType type = createJavaType(mapper);
-            if (type == null)
+            if (type == null) {
                 return mapper.readValue(content, returnedClass);
+            }
 
             return mapper.readValue(content, type);
         } catch (IOException e) {
@@ -82,6 +93,8 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            mapper.registerModule(new JavaTimeModule());
             return mapper.writeValueAsString(object);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -98,8 +111,7 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
      * Optionnal
      */
     @Override
-    public Object replace(Object original, Object target, Object owner)
-            throws HibernateException {
+    public Object replace(Object original, Object target, Object owner) throws HibernateException {
         return deepCopy(original);
     }
 
@@ -126,19 +138,22 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
      * @throws HibernateException
      */
     @Override
-    public Object assemble(Serializable cached, Object owner)
-            throws HibernateException {
+    public Object assemble(Serializable cached, Object owner) throws HibernateException {
         return deepCopy(cached);
     }
 
     /**
-     * By default we are expecting to use a simple object / not a collection (Set, List)
+     * By default we are expecting to use a simple object / not a collection (Set,
+     * List)
      *
-     * @param mapper : instance jackson object mapper
+     * @param mapper
+     *            : instance jackson object mapper
      *
-     * @return A jackson JavaType to specify wich object represent the json string representation
+     * @return A jackson JavaType to specify wich object represent the json string
+     *         representation
      *
      */
+    @SuppressWarnings("deprecation")
     public JavaType createJavaType(ObjectMapper mapper) {
         try {
             return SimpleType.construct(returnedClass());
@@ -149,15 +164,17 @@ public class JsonUserType implements UserType, DynamicParameterizedType {
 
     @Override
     public int[] sqlTypes() {
+        
         return SQL_TYPES;
+        
     }
 
     @Override
     public void setParameterValues(Properties parameters) {
         final ParameterType reader = (ParameterType) parameters.get(PARAMETER_TYPE);
-
-        if (reader != null)
+        if (reader != null) {
             this.returnedClass = reader.getReturnedClass();
+        }
 
     }
 

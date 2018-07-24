@@ -1,6 +1,7 @@
 package com.tgt.mkt.cam.entity;
 
 
+import com.tgt.mkt.cam.entity.types.JsonType;
 import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
@@ -10,13 +11,13 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name="item")
+@Table(name="sample")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@TypeDef(name = "PriceJsonType", typeClass = JsonUserType.class)
+@TypeDef(name = "PriceJsonType", typeClass = JsonType.class)
 public class Item {
     @Column(name = "product_id")
     @Id
