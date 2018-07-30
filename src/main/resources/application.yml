@@ -35,3 +35,8 @@ jwt:
   expiry: 2
 token:
   prefix: Bearer
+hazelcast:
+  host: localhost
+  port: 5701
+  name: hz-compose
+  password: test@user
