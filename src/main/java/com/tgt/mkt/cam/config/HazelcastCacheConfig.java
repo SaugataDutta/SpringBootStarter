@@ -22,7 +22,7 @@ public class HazelcastCacheConfig {
     private String hzcastPassword;
 
 
-    @Bean
+    //@Bean
     public HazelcastInstance hazelcastInstance() {
         ClientNetworkConfig networkConfig = new ClientNetworkConfig()
                 .addAddress(hzcastHost+":"+hzcastPort);

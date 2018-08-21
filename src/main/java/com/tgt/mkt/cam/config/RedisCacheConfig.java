@@ -25,7 +25,7 @@ public class RedisCacheConfig {
     @Value("${spring.redis.port}")
     private int redisPort;
 
-    @Bean
+    //@Bean
     JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration configuration =
                 new RedisStandaloneConfiguration(redisHost,
@@ -33,7 +33,7 @@ public class RedisCacheConfig {
         return new JedisConnectionFactory(configuration);
     }
 
-    @Bean
+    //@Bean
     CacheManager cacheManager() {
         Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new
                 Jackson2JsonRedisSerializer(Object.class);

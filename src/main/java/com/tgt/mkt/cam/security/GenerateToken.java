@@ -25,7 +25,7 @@ public class GenerateToken {
 
     /* Issuer will be based on business - FACL(Falabella-Chile), SOCL(Sodimac-Chile), TOCL
     (Tottus-Chile) */
-    public static final String FALABELLA_ISSUER = "TOCL";
+    public static final String FALABELLA_ISSUER = "FACL";
 
     public static final String JWT_TOKEN = "JwtToken";
 
@@ -55,7 +55,7 @@ public class GenerateToken {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        ProfileToken profile = new ProfileToken("8304218-4", "sdutta@falabella.cl");
+        ProfileToken profile = new ProfileToken("8304218-4", "sduTTa@falabella.cl");
         String token = createJWT(profile);
         System.out.println(token);
     }
